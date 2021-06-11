@@ -25,8 +25,8 @@ public enum CallbackInstance {
     private final DLNACallback mCallback;
 
     CallbackInstance() {
-        mCallback = (type, param1, param2, param3) -> {
-            Log.d(TAG, "type: " + type
+        mCallback = (int type, String param1, String param2, String param3) -> {
+            Log.d(TAG, "______type: " + type
                     + "\nparam1: " + param1
                     + "\nparam2: " + param2
                     + "\nparam3: " + param3);

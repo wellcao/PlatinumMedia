@@ -1,10 +1,13 @@
 package com.hzy.platinum.media.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.IBinder;
 
 import com.hzy.platinum.media.R;
@@ -32,6 +35,8 @@ public class DLNAService extends Service {
     private static final String TAG = "DLNAService";
     private WifiManager.MulticastLock mMulticastLock;
     private Notification mNotification;
+    private final String CHANNAL_ID = "platinum_media";
+    private final String CHANNAL_NAME = "platinum_media";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -49,9 +54,15 @@ public class DLNAService extends Service {
     private void buildNotification() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNAL_ID, CHANNAL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(notificationChannel);
+        }
         mNotification = NotificationHelper.INSTANCE
                 .getNotification(intent, getString(R.string.server_notification_title),
                         getString(R.string.server_notification_text));
+        startForeground(1, mNotification);
     }
 
     private void acquireMulticastLock() {
@@ -69,7 +80,7 @@ public class DLNAService extends Service {
             ServerParams params = intent.getParcelableExtra(EXTRA_SERVER_PARAMS);
             if (params != null) {
                 ServerInstance.INSTANCE.start(params);
-                NotificationHelper.INSTANCE.notify(mNotification);
+                //NotificationHelper.INSTANCE.notify(mNotification);
             }
         }
         return super.onStartCommand(intent, flags, startId);

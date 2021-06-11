@@ -55,6 +55,7 @@ public class VideoActivity extends BasePlayActivity {
             if (videoControls instanceof VideoControls) {
                 ((VideoControls) videoControls).setTitle(mMediaInfo.title);
             }
+            Log.e("______play url:   ","url:   "+mMediaInfo.url);
             Uri uri = Uri.parse(mMediaInfo.url);
             mVideoView.setVideoURI(uri);
         }
