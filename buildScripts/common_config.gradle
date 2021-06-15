@@ -1,0 +1,15 @@
+// module config
+ext {
+    compileSdkVersion = 28
+    buildToolsVersion = "28.0.3"
+    minSdkVersion = 16
+    targetSdkVersion = 28
+    versionCode = 1001
+    versionName = "1.0.01"
+
+    dependencies = [
+            "eventbus"         : 'org.greenrobot:eventbus:3.1.1',
+            "utilcode"         : 'com.blankj:utilcode:1.25.9',
+            "appcompat"        : 'androidx.appcompat:appcompat:1.1.0'
+    ]
+}

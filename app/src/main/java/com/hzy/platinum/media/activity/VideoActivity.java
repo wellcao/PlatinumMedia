@@ -11,6 +11,10 @@ import com.devbrackets.android.exomedia.ui.widget.VideoControls;
 import com.devbrackets.android.exomedia.ui.widget.VideoControlsCore;
 import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.hzy.platinum.media.R;
+import com.lejia.arglass.media.media.MediaInfo;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +35,7 @@ public class VideoActivity extends BasePlayActivity {
         setContentView(R.layout.activity_video);
         ButterKnife.bind(this);
         initVideoPlayer();
-        setCurrentMediaAndPlay();
+        //setCurrentMediaAndPlay();
     }
 
     private void initVideoPlayer() {
@@ -61,6 +65,20 @@ public class VideoActivity extends BasePlayActivity {
         }
     }
 
+    void setCurrentMediaAndPlay(MediaInfo mediaInfo) {
+        mMediaInfo = mediaInfo;
+        if (mMediaInfo != null) {
+            VideoControlsCore videoControls = mVideoView.getVideoControlsCore();
+            if (videoControls instanceof VideoControls) {
+                ((VideoControls) videoControls).setTitle(mMediaInfo.title);
+            }
+            Log.e("______play url:   ","url:   "+mMediaInfo.url);
+            Uri uri = Uri.parse(mMediaInfo.url);
+            mVideoView.setVideoURI(uri);
+        }
+    }
+
+
     @Override
     protected void onMediaPause() {
         if(mVideoView.isPlaying()){
@@ -78,5 +96,14 @@ public class VideoActivity extends BasePlayActivity {
     @Override
     public void onCompletion() {
         mVideoView.seekTo(0);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+    public void onPlayState(MediaInfo event) {
+        if ("play".equals(event.event)){
+            setCurrentMediaAndPlay(event);
+        }else if ("pause".equals(event.event)){
+            onMediaPause();
+        }
     }
 }

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     signingConfigs {
         demokey {
@@ -13,10 +13,10 @@ android {
     }
     defaultConfig {
         applicationId "com.hzy.platinum.media"
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 2
-        versionName "1.0.1"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         resConfigs "zh-rCN"
         vectorDrawables.useSupportLibrary = true
     }
@@ -50,7 +50,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation rootProject.ext.dependencies['appcompat']
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'com.blankj:utilcode:1.25.9'
@@ -72,4 +72,5 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
     implementation project(':platinum')
+    api project(':ARGlassMedia')
 }

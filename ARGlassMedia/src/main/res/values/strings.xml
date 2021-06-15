@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_default" translatable="false">Platinum</string>
+    <string name="server_notification_title">Platinum 服务器</string>
+    <string name="server_notification_text">DLNA 服务器正在运行!</string>
+</resources>

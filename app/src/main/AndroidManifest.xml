@@ -23,7 +23,7 @@
         <service android:name=".service.DLNAService" />
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.VideoActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
@@ -44,7 +44,7 @@
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.VideoActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/title_video_player"
             android:launchMode="singleTask" />
         <activity

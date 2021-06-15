@@ -1,4 +1,4 @@
-package com.hzy.platinum.media.service;
+package com.lejia.arglass.media.service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,12 +10,11 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.IBinder;
 
-import com.hzy.platinum.media.R;
-import com.hzy.platinum.media.activity.MainActivity;
-import com.hzy.platinum.media.event.NativeAsyncEvent;
-import com.hzy.platinum.media.instance.NotificationHelper;
-import com.hzy.platinum.media.instance.ServerInstance;
-import com.hzy.platinum.media.media.MediaUtils;
+import com.lejia.arglass.R;
+import com.lejia.arglass.media.event.NativeAsyncEvent;
+import com.lejia.arglass.media.instance.NotificationHelper;
+import com.lejia.arglass.media.instance.ServerInstance;
+import com.lejia.arglass.media.media.MediaUtils;
 import com.plutinosoft.platinum.CallbackTypes;
 import com.plutinosoft.platinum.ServerParams;
 
@@ -52,7 +51,14 @@ public class DLNAService extends Service {
     }
 
     private void buildNotification() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Class dlnaClass = null;
+        try {
+            dlnaClass = Class.forName("com.hzy.platinum.media.activity.MainActivity");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+        Intent intent = new Intent(this, dlnaClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(CHANNAL_ID, CHANNAL_NAME, NotificationManager.IMPORTANCE_LOW);
@@ -92,6 +98,9 @@ public class DLNAService extends Service {
         switch (event.type) {
             case CallbackTypes.CALLBACK_EVENT_ON_PLAY:
                 MediaUtils.startPlayMedia(this, event.mediaInfo);
+                break;
+            case CallbackTypes.CALLBACK_EVENT_ON_PAUSE:
+                MediaUtils.pauseMedia(event.mediaInfo);
                 break;
             default:
                 break;

@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFabStatue() {
-        ServerInstance.State state = ServerInstance.INSTANCE.getState();
+        com.lejia.arglass.media.instance.ServerInstance.State state = com.lejia.arglass.media.instance.ServerInstance.INSTANCE.getState();
         setFabStatus(state);
     }
 
@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
      */
     @SuppressWarnings("UnusedDeclaration")
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    public void onServerStateChange(ServerStateEvent event) {
-        ServerInstance.State state = event.getState();
+    public void onServerStateChange(com.lejia.arglass.media.event.ServerStateEvent event) {
+        com.lejia.arglass.media.instance.ServerInstance.State state = event.getState();
         setFabStatus(state);
         switch (state) {
             case RUNNING:
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setFabStatus(ServerInstance.State state) {
+    private void setFabStatus(com.lejia.arglass.media.instance.ServerInstance.State state) {
         switch (state) {
             case IDLE:
                 mFab.setImageResource(R.drawable.ic_service_idle);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onFabButtonClicked() {
-        ServerInstance.State state = ServerInstance.INSTANCE.getState();
+        com.lejia.arglass.media.instance.ServerInstance.State state =  com.lejia.arglass.media.instance.ServerInstance.INSTANCE.getState();
         switch (state) {
             case IDLE:
                 startServerService();
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
      * Start the server
      */
     private void startServerService() {
-        Intent intent = new Intent(this, DLNAService.class);
+        Intent intent = new Intent(this, com.lejia.arglass.media.service.DLNAService.class);
         intent.putExtra(DLNAService.EXTRA_SERVER_PARAMS, loadServerParams());
         startService(intent);
     }
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
      * Stop the server service
      */
     private void stopServerService() {
-        Intent intent = new Intent(this, DLNAService.class);
+        Intent intent = new Intent(this, com.lejia.arglass.media.service.DLNAService.class);
         stopService(intent);
     }
 

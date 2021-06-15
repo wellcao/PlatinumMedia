@@ -10,8 +10,7 @@
     <string name="pref_uuid_title">UUID</string>
     <string name="pref_uuid_summary">%s</string>
     <string name="pref_dialog_title_uuid">是否生成新的UUID?</string>
-    <string name="server_notification_title">Platinum 服务器</string>
-    <string name="server_notification_text">DLNA 服务器正在运行!</string>
+
     <string name="server_started">服务器开始运行！</string>
     <string name="server_stopped">服务器停止运行!</string>
     <string name="title_video_player">视频播放器</string>

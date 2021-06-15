@@ -1,11 +1,11 @@
-package com.hzy.platinum.media.instance;
+package com.lejia.arglass.media.instance;
 
 import android.util.Log;
 
-import com.hzy.platinum.media.event.NativeAsyncEvent;
-import com.hzy.platinum.media.media.MediaInfo;
-import com.hzy.platinum.media.media.MediaType;
-import com.hzy.platinum.media.utils.DLNAUtils;
+import com.lejia.arglass.media.event.NativeAsyncEvent;
+import com.lejia.arglass.media.media.MediaInfo;
+import com.lejia.arglass.media.utils.DLNAUtils;
+import com.lejia.arglass.media.utils.MediaType;
 import com.plutinosoft.platinum.CallbackTypes;
 import com.plutinosoft.platinum.DLNACallback;
 
@@ -37,6 +37,7 @@ public enum CallbackInstance {
                         CallbackInstance.this.startPlayMedia(type, param1, param2);
                         break;
                     case CallbackTypes.CALLBACK_EVENT_ON_PAUSE:
+                        CallbackInstance.this.stopPlayMedia(type,param1,param2);
                         break;
                     case CallbackTypes.CALLBACK_EVENT_ON_SEEK:
                         break;
@@ -51,6 +52,16 @@ public enum CallbackInstance {
             Log.w(TAG, "Media Type Unknown!");
             return;
         }
+        NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
+        EventBus.getDefault().post(event);
+    }
+
+    private void stopPlayMedia(int type,String url,String meta){
+        MediaInfo mediaInfo = DLNAUtils.getMediaInfo(url, meta);
+        if (type!=CallbackTypes.CALLBACK_EVENT_ON_PAUSE) {
+            return;
+        }
+        mediaInfo.event = "pause";
         NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
         EventBus.getDefault().post(event);
     }
