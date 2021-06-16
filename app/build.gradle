@@ -72,5 +72,5 @@ dependencies {
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
     //releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
     //implementation project(':platinum')
-    api project(':ARGlassMedia')
+    api project(':PlatinumMedia')
 }

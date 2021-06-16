@@ -50,7 +50,6 @@ public abstract class BasePlayActivity extends AppCompatActivity
         parseIntent(getIntent());
         mPreference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         EventBus.getDefault().register(this);
-
         startServerService();
     }
 
