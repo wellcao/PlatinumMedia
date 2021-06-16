@@ -69,8 +69,8 @@ dependencies {
     }
     implementation 'com.jakewharton:butterknife:10.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
-    implementation project(':platinum')
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    //releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    //implementation project(':platinum')
     api project(':ARGlassMedia')
 }

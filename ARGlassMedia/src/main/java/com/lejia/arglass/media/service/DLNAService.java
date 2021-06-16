@@ -11,16 +11,9 @@ import android.os.Build;
 import android.os.IBinder;
 
 import com.lejia.arglass.R;
-import com.lejia.arglass.media.event.NativeAsyncEvent;
 import com.lejia.arglass.media.instance.NotificationHelper;
 import com.lejia.arglass.media.instance.ServerInstance;
-import com.lejia.arglass.media.media.MediaUtils;
-import com.plutinosoft.platinum.CallbackTypes;
 import com.plutinosoft.platinum.ServerParams;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by huzongyao on 2018/6/7.
@@ -47,7 +40,6 @@ public class DLNAService extends Service {
         super.onCreate();
         acquireMulticastLock();
         buildNotification();
-        EventBus.getDefault().register(this);
     }
 
     private void buildNotification() {
@@ -92,20 +84,6 @@ public class DLNAService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    public void onServerStateChange(NativeAsyncEvent event) {
-        switch (event.type) {
-            case CallbackTypes.CALLBACK_EVENT_ON_PLAY:
-                MediaUtils.startPlayMedia(this, event.mediaInfo);
-                break;
-            case CallbackTypes.CALLBACK_EVENT_ON_PAUSE:
-                MediaUtils.pauseMedia(event.mediaInfo);
-                break;
-            default:
-                break;
-        }
-    }
 
     @Override
     public void onDestroy() {
@@ -113,7 +91,6 @@ public class DLNAService extends Service {
             mMulticastLock.release();
             mMulticastLock = null;
         }
-        EventBus.getDefault().unregister(this);
         ServerInstance.INSTANCE.stop();
         NotificationHelper.INSTANCE.cancel();
         super.onDestroy();

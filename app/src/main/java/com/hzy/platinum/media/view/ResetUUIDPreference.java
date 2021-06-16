@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.hzy.platinum.media.R;
-import com.hzy.platinum.media.utils.UUIDUtils;
+import com.lejia.arglass.media.utils.UUIDUtils;
 
 /**
  * Created by huzongyao on 2018/6/11.

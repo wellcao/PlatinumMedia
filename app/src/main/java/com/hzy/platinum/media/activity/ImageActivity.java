@@ -15,6 +15,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.hzy.platinum.media.R;
+import com.lejia.arglass.media.media.MediaInfo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,11 +43,11 @@ public class ImageActivity extends BasePlayActivity {
         ButterKnife.bind(this);
         mGlide = Glide.with(this);
         mPhotoViewTarget = new PhotoViewTarget(mPhotoView);
-        setCurrentMediaAndPlay();
+        setCurrentMediaAndPlay(null);
     }
 
     @Override
-    void setCurrentMediaAndPlay() {
+    void setCurrentMediaAndPlay(MediaInfo mediaInfo) {
         if (mMediaInfo != null) {
             Uri uri = Uri.parse(mMediaInfo.url);
             mGlide.load(uri).into(mPhotoViewTarget);
@@ -70,5 +71,15 @@ public class ImageActivity extends BasePlayActivity {
             super.onResourceReady(resource, transition);
             mProgressBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    void stopMedia() {
+
+    }
+
+    @Override
+    void play() {
+
     }
 }

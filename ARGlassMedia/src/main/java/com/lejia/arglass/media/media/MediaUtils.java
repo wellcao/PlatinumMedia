@@ -1,10 +1,7 @@
 package com.lejia.arglass.media.media;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.format.DateUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.Formatter;
@@ -20,55 +17,6 @@ public class MediaUtils {
     private static StringBuilder formatBuilder = new StringBuilder();
     private static Formatter formatter = new Formatter(formatBuilder, Locale.getDefault());
 
-    /**
-     * Start To Play media info with new Task flag
-     *
-     * @param context   context
-     * @param mediaInfo nediaInfo
-     */
-    public static void startPlayMedia(Context context, MediaInfo mediaInfo) {
-        if (mediaInfo == null) {
-            return;
-        }
-        Intent intent = new Intent();
-        Class clazz;
-        try{
-            switch (mediaInfo.mediaType) {
-                case TYPE_VIDEO:
-                    clazz = Class.forName("com.hzy.platinum.media.activity.VideoActivity");
-                    mediaInfo.event = "play";
-                    EventBus.getDefault().post(mediaInfo);
-                    break;
-                case TYPE_AUDIO:
-                    //clazz = Class.forName("com.hzy.platinum.media.activity.AudioActivity");
-                    break;
-                case TYPE_IMAGE:
-                    //clazz = Class.forName("com.hzy.platinum.media.activity.ImageActivity");
-                    break;
-                default:
-                    return;
-            }
-           /* intent.setClass(context, clazz);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(EXTRA_MEDIA_INFO, mediaInfo);
-            context.startActivity(intent);*/
-        }catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
-    }
-
-    public static void pauseMedia(MediaInfo mediaInfo){
-        if (mediaInfo == null){
-            return;
-        }
-       /* switch (mediaInfo.mediaType){
-            case TYPE_VIDEO:
-                mediaInfo.event = "pause";
-                EventBus.getDefault().post(mediaInfo);
-                break;
-        }*/
-        EventBus.getDefault().post(mediaInfo);
-    }
 
     /**
      * Init exo media
@@ -133,5 +81,17 @@ public class MediaUtils {
         }
 
         return formatter.format("%02d:%02d", minutes, seconds).toString();
+    }
+
+    /*
+     * 将时分秒转为秒数
+     * */
+    public static long formatTurnSecond(String time) {
+        int index1 = time.indexOf(":");
+        int index2 = time.indexOf(":", index1 + 1);
+        int hh = Integer.parseInt(time.substring(0, index1));
+        int mi = Integer.parseInt(time.substring(index1 + 1, index2));
+        int ss = Integer.parseInt(time.substring(index2 + 1));
+        return hh * 60 * 60 + mi * 60 + ss;
     }
 }

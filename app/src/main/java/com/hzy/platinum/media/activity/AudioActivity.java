@@ -26,8 +26,9 @@ import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.devbrackets.android.exomedia.AudioPlayer;
 import com.hzy.platinum.media.R;
-import com.hzy.platinum.media.media.MediaUtils;
 import com.hzy.platinum.media.view.MusicDiskView;
+import com.lejia.arglass.media.media.MediaInfo;
+import com.lejia.arglass.media.media.MediaUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +40,7 @@ import butterknife.OnClick;
  */
 
 public class AudioActivity extends BasePlayActivity
-        implements SeekBar.OnSeekBarChangeListener {
+        implements SeekBar.OnSeekBarChangeListener{
 
     @BindView(R.id.audio_player_loading)
     ProgressBar mAudioPlayerLoading;
@@ -69,7 +70,7 @@ public class AudioActivity extends BasePlayActivity
         setContentView(R.layout.activity_audio);
         ButterKnife.bind(this);
         initAudioPlayer();
-        setCurrentMediaAndPlay();
+        setCurrentMediaAndPlay(null);
     }
 
     private void initAudioPlayer() {
@@ -83,7 +84,7 @@ public class AudioActivity extends BasePlayActivity
     }
 
     @Override
-    void setCurrentMediaAndPlay() {
+    void setCurrentMediaAndPlay(MediaInfo mediaInfo) {
         if (mMediaInfo != null) {
             if (!TextUtils.isEmpty(mMediaInfo.albumArtURI)) {
                 Uri artUri = Uri.parse(mMediaInfo.albumArtURI);
@@ -96,6 +97,16 @@ public class AudioActivity extends BasePlayActivity
             mAudioPlayer.setDataSource(uri);
             mAudioPlayer.prepareAsync();
         }
+    }
+
+    @Override
+    void stopMedia() {
+
+    }
+
+    @Override
+    void play() {
+
     }
 
     @OnClick(R.id.audio_player_play_pause)

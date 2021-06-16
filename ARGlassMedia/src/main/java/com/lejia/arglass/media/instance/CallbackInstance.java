@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.lejia.arglass.media.event.NativeAsyncEvent;
 import com.lejia.arglass.media.media.MediaInfo;
+import com.lejia.arglass.media.media.MediaUtils;
 import com.lejia.arglass.media.utils.DLNAUtils;
 import com.lejia.arglass.media.utils.MediaType;
 import com.plutinosoft.platinum.CallbackTypes;
@@ -34,12 +35,22 @@ public enum CallbackInstance {
                         + "\nparam3: " + param3);
                 switch (type) {
                     case CallbackTypes.CALLBACK_EVENT_ON_PLAY:
-                        CallbackInstance.this.startPlayMedia(type, param1, param2);
+                        CallbackInstance.this.play(type, param1, param2);
                         break;
                     case CallbackTypes.CALLBACK_EVENT_ON_PAUSE:
-                        CallbackInstance.this.stopPlayMedia(type,param1,param2);
+                        CallbackInstance.this.pauseMedia(type, param1, param2);
+                        break;
+                    case CallbackTypes.CALLBACK_EVENT_ON_STOP:
+                        CallbackInstance.this.stopMedia(type);
+                        break;
+                    case CallbackTypes.CALLBACK_EVENT_ON_SET_VOLUME:
+                        CallbackInstance.this.setVolume(type, Integer.parseInt(param1));
                         break;
                     case CallbackTypes.CALLBACK_EVENT_ON_SEEK:
+                        CallbackInstance.this.seek(type, param2);
+                        break;
+                    case CallbackTypes.CALLBACK_EVENT_ON_SET_AV_TRANSPORT_URI:
+                        CallbackInstance.this.startPlayMedia(type, param1, param2);
                         break;
                 }
             }
@@ -52,16 +63,48 @@ public enum CallbackInstance {
             Log.w(TAG, "Media Type Unknown!");
             return;
         }
+        mediaInfo.event = "setAVTransportURI";
         NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
         EventBus.getDefault().post(event);
     }
 
-    private void stopPlayMedia(int type,String url,String meta){
+    private void play(int type, String url, String meta){
         MediaInfo mediaInfo = DLNAUtils.getMediaInfo(url, meta);
-        if (type!=CallbackTypes.CALLBACK_EVENT_ON_PAUSE) {
+        if (mediaInfo.mediaType == MediaType.TYPE_UNKNOWN) {
+            Log.w(TAG, "Media Type Unknown!");
             return;
         }
+        mediaInfo.event = "play";
+        NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
+        EventBus.getDefault().post(event);
+    }
+
+    private void pauseMedia(int type, String url, String meta) {
+        MediaInfo mediaInfo = DLNAUtils.getMediaInfo(url, meta);
         mediaInfo.event = "pause";
+        NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
+        EventBus.getDefault().post(event);
+    }
+
+    private void stopMedia(int type) {
+        MediaInfo mediaInfo = new MediaInfo();
+        mediaInfo.event = "stop";
+        NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
+        EventBus.getDefault().post(event);
+    }
+
+    private void setVolume(int type, int volume) {
+        MediaInfo mediaInfo = new MediaInfo();
+        mediaInfo.event = "setVolume";
+        mediaInfo.volume = volume;
+        NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
+        EventBus.getDefault().post(event);
+    }
+
+    private void seek(int type, String current) {
+        MediaInfo mediaInfo = new MediaInfo();
+        mediaInfo.event = "seek";
+        mediaInfo.current = MediaUtils.formatTurnSecond(current);
         NativeAsyncEvent event = new NativeAsyncEvent(type, mediaInfo);
         EventBus.getDefault().post(event);
     }

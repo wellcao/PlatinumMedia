@@ -16,11 +16,11 @@ import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
 import com.devbrackets.android.exomedia.listener.OnCompletionListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.hzy.platinum.media.R;
-import com.hzy.platinum.media.event.NativeAsyncEvent;
-import com.hzy.platinum.media.media.MediaInfo;
-import com.hzy.platinum.media.media.MediaUtils;
-import com.hzy.platinum.media.service.DLNAService;
-import com.hzy.platinum.media.utils.UUIDUtils;
+import com.lejia.arglass.media.event.NativeAsyncEvent;
+import com.lejia.arglass.media.media.MediaInfo;
+import com.lejia.arglass.media.media.MediaUtils;
+import com.lejia.arglass.media.service.DLNAService;
+import com.lejia.arglass.media.utils.UUIDUtils;
 import com.plutinosoft.platinum.CallbackTypes;
 import com.plutinosoft.platinum.ServerParams;
 
@@ -65,7 +65,7 @@ public abstract class BasePlayActivity extends AppCompatActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         parseIntent(intent);
-        setCurrentMediaAndPlay();
+        setCurrentMediaAndPlay(null);
     }
 
     private void parseIntent(Intent intent) {
@@ -82,7 +82,7 @@ public abstract class BasePlayActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+ /*   @SuppressWarnings("UnusedDeclaration")
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onServerStateChange(NativeAsyncEvent event) {
         switch (event.type) {
@@ -98,7 +98,7 @@ public abstract class BasePlayActivity extends AppCompatActivity
                 break;
         }
     }
-
+*/
     protected void onMediaPause() {
     }
 
@@ -117,7 +117,18 @@ public abstract class BasePlayActivity extends AppCompatActivity
     /**
      * Set current media source and start to play
      */
-    abstract void setCurrentMediaAndPlay();
+    abstract void setCurrentMediaAndPlay(MediaInfo event);
+
+    abstract void stopMedia();
+
+    abstract void play();
+
+    protected void setVolume(float percent){
+    }
+
+    protected void seekTo(long current){
+
+    }
 
     /**
      * Start the server
@@ -159,5 +170,23 @@ public abstract class BasePlayActivity extends AppCompatActivity
             mPreference.edit().putString(key, uuid).apply();
         }
         return new ServerParams(name, showIp, uuid);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+    public void onPlayState(NativeAsyncEvent event) {
+        MediaInfo mediaInfo = event.mediaInfo;
+        if ("setAVTransportURI".equals(mediaInfo.event)){
+            setCurrentMediaAndPlay(mediaInfo);
+        }else if ("pause".equals(mediaInfo.event)){
+            onMediaPause();
+        }else if ("stop".equals(mediaInfo.event)){
+            stopMedia();
+        }else if ("setVolume".equals(mediaInfo.event)){
+            setVolume((mediaInfo.volume+0.0f)/100);
+        }else if ("seek".equals(mediaInfo.event)){
+            seekTo(mediaInfo.current);
+        }else if ("play".equals(mediaInfo.event)){
+            play();
+        }
     }
 }

@@ -33,5 +33,5 @@ dependencies {
     }
     implementation rootProject.ext.dependencies['utilcode']
     implementation rootProject.ext.dependencies['appcompat']
-    api project(":platinum")
+    //api project(":platinum")
 }

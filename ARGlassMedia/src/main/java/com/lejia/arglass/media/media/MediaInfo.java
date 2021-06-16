@@ -16,6 +16,8 @@ public class MediaInfo implements Parcelable {
     public String url;
     public String albumArtURI;
     public String event;
+    public int volume;
+    public long current;
 
     public MediaInfo() {
     }

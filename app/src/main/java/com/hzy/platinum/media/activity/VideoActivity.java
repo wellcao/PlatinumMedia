@@ -2,9 +2,6 @@ package com.hzy.platinum.media.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
 import com.devbrackets.android.exomedia.ui.widget.VideoControls;
@@ -13,9 +10,7 @@ import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.hzy.platinum.media.R;
 import com.lejia.arglass.media.media.MediaInfo;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -35,36 +30,26 @@ public class VideoActivity extends BasePlayActivity {
         setContentView(R.layout.activity_video);
         ButterKnife.bind(this);
         initVideoPlayer();
-        //setCurrentMediaAndPlay();
     }
 
     private void initVideoPlayer() {
+        if (mVideoView == null){
+            mVideoView = findViewById(R.id.video_view);
+        }
         mVideoView.setHandleAudioFocus(false);
         mVideoView.setOnPreparedListener(this);
         mVideoView.setOnCompletionListener(this);
         mVideoView.setOnBufferUpdateListener(this);
+        mVideoView.setVolume(0.06f);
         mVideoView.setOnErrorListener(new OnErrorListener() {
             @Override
             public boolean onError(Exception e) {
-                Log.e("_______video play error","______error:  "+e.getMessage());
                 return false;
             }
         });
     }
 
     @Override
-    void setCurrentMediaAndPlay() {
-        if (mMediaInfo != null) {
-            VideoControlsCore videoControls = mVideoView.getVideoControlsCore();
-            if (videoControls instanceof VideoControls) {
-                ((VideoControls) videoControls).setTitle(mMediaInfo.title);
-            }
-            Log.e("______play url:   ","url:   "+mMediaInfo.url);
-            Uri uri = Uri.parse(mMediaInfo.url);
-            mVideoView.setVideoURI(uri);
-        }
-    }
-
     void setCurrentMediaAndPlay(MediaInfo mediaInfo) {
         mMediaInfo = mediaInfo;
         if (mMediaInfo != null) {
@@ -72,7 +57,6 @@ public class VideoActivity extends BasePlayActivity {
             if (videoControls instanceof VideoControls) {
                 ((VideoControls) videoControls).setTitle(mMediaInfo.title);
             }
-            Log.e("______play url:   ","url:   "+mMediaInfo.url);
             Uri uri = Uri.parse(mMediaInfo.url);
             mVideoView.setVideoURI(uri);
         }
@@ -81,7 +65,7 @@ public class VideoActivity extends BasePlayActivity {
 
     @Override
     protected void onMediaPause() {
-        if(mVideoView.isPlaying()){
+        if (mVideoView.isPlaying()) {
             mVideoView.pause();
         }
     }
@@ -98,12 +82,28 @@ public class VideoActivity extends BasePlayActivity {
         mVideoView.seekTo(0);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
-    public void onPlayState(MediaInfo event) {
-        if ("play".equals(event.event)){
-            setCurrentMediaAndPlay(event);
-        }else if ("pause".equals(event.event)){
-            onMediaPause();
+    @Override
+    void stopMedia() {
+        mVideoView.stopPlayback();
+        mVideoView.reset();
+    }
+
+    @Override
+    void play() {
+        if (mVideoView.isPlaying()) {
+            mVideoView.pause();
+        } else {
+            mVideoView.start();
         }
+    }
+
+    @Override
+    protected void setVolume(float percent) {
+        mVideoView.setVolume(percent);
+    }
+
+    @Override
+    protected void seekTo(long current) {
+        mVideoView.seekTo(current * 1000);
     }
 }

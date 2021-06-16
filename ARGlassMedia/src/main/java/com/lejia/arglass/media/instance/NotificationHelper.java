@@ -32,7 +32,7 @@ public enum NotificationHelper {
             Context context = Utils.getApp();
             NotificationChannel channel = new NotificationChannel(PRIMARY_CHANNEL,
                     context.getString(R.string.notification_channel_default),
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_MIN);
             getManager().createNotificationChannel(channel);
         }
     }
@@ -47,6 +47,8 @@ public enum NotificationHelper {
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(false)
                 .setOngoing(true)
+                .setSound(null)
+                .setVibrate(new long[]{01})
                 .build();
     }
 

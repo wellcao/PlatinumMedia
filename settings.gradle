@@ -1,2 +1,2 @@
 include ':ARGlassMedia'
-include ':app', ':platinum'
+include ':app'
